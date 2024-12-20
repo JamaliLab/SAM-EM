@@ -9,18 +9,18 @@ Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy 
 
 ## Installation
 -First create a conda enviornment for SAM4EM using `conda create -n SAM4EM'
--Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM'. For installing SAM 2 module, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `python>=3.10' and `torch>=2.5.1':
+-Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM'. For installing SAM 2 module, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `python>=3.10` and `torch>=2.5.1`:
 ### -For GPU with CUDA 11.7:
-conda install pytorch==2.3.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+`conda install pytorch==2.3.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia`
 ### -For CPU only:
-conda install pytorch==2.3.1 torchvision torchaudio cpuonly -c pytorch
+`conda install pytorch==2.3.1 torchvision torchaudio cpuonly -c pytorch`
 
 Then clone Meta SAM 2 repository in the desire directory:
 
-`git clone https://github.com/meta/SAM2.git'
+`git clone https://github.com/meta/SAM2.git`
 
-`cd sam2'
-pip install -e ".[notebooks]"
+`cd sam2`
+`pip install -e ".[notebooks]"`
 
 Next download all relevant model checkpoint:
 .[sam2.1_hiera_tiny.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_tiny.pt)
@@ -30,7 +30,7 @@ Next download all relevant model checkpoint:
 
 -For the Particle tracking module install the following packages:
 
-`pip install -r requirements.txt'
+`pip install -r requirements.txt`
 
 -Next add the Jupyter notebook in this repository and your data folder to the notebooks directory of SAM2 to segment videos and analyze spatiotemporal trajectories
 
