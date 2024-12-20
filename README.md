@@ -8,8 +8,9 @@ Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy 
 * * * * * *
 
 ## Installation
--First create a conda enviornment for SAM4EM using `conda create -n SAM4EM'
--Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM'. For installing SAM 2 module, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `python>=3.10` and `torch>=2.5.1`:
+-First create a conda enviornment for SAM4EM using `conda create -n SAM4EM`
+
+-Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM`. For installing SAM 2 module, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `python>=3.10` and `torch>=2.5.1`:
 ### -For GPU with CUDA 11.7:
 `conda install pytorch==2.3.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia`
 ### -For CPU only:
