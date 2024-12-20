@@ -21,6 +21,7 @@ Then clone Meta SAM 2 repository in the desire directory:
 `git clone https://github.com/meta/SAM2.git`
 
 `cd sam2`
+
 `pip install -e ".[notebooks]"`
 
 Next download all relevant model checkpoint:
