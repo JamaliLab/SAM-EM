@@ -40,6 +40,7 @@ Next download all most recent sam2 model checkpoints into checkpoint directory:
 
 -Next add the Jupyter notebook in this repository and your data folder to the notebooks directory of SAM2 to segment videos and analyze spatiotemporal trajectories
 
+Here is an example of how the masklets of the tracked particles look like in the ![output](exampleanimation.gif)
 
 * * * * * *
 ## Acknowledgements 
