@@ -8,23 +8,33 @@ Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy 
 * * * * * *
 
 ## Installation
--First create a conda enviornment for SAM4EM using `conda create -n SAM4EM`
+-First create a conda enviornment for SAM4EM using `conda create -n SAM4EM python=3.10`
 
--Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM`. For installing SAM 2, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `python>=3.10` and `torch>=2.5.1`:
+-Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM`. For installing SAM 2, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `torch>=2.5.1`:
 ### -For GPU with CUDA 11.7:
-`conda install pytorch==2.3.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia`
+`conda install pytorch==2.5.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia`
 ### -For CPU only:
-`conda install pytorch==2.3.1 torchvision torchaudio cpuonly -c pytorch`
+`conda install pytorch==2.5.1 torchvision torchaudio cpuonly -c pytorch`
 
-Then clone Meta SAM 2 repository in the desire directory:
+If using a Windows machine, open git bash;
+
+Then clone Meta SAM 2 repository in the desired directory:
 
 `git clone https://github.com/meta/SAM2.git`
+
+In the command prompt locate the SAM2 cloned directory
 
 `cd sam2`
 
 `pip install -e ".[notebooks]"`
 
-Next download all most recent sam2 model checkpoints into checkpoint directory:
+Next download the most recent sam2 model checkpoints into the checkpoint directory; first use git bash (if using Windows machine), and download check points
+
+`cd sam2/checkpoints`
+
+`./download_ckpts.sh`
+
+Alternatively directly download them:
 
 .[sam2.1_hiera_tiny.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_tiny.pt)
 
@@ -34,11 +44,13 @@ Next download all most recent sam2 model checkpoints into checkpoint directory:
 
 .[sam2.1_hiera_large.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt)
 
--For the Particle tracking module install the following packages:
+-For the Particle tracking module, install the following packages using the requirements.txt file in SAM4EM git repository:
 
 `pip install -r requirements.txt`
 
--Next add the Jupyter notebook in this repository and your data folder to the notebooks directory of SAM2 to segment videos and analyze spatiotemporal trajectories
+-Next add the Jupyter notebook in this repository and your data folder to segment videos and analyze spatiotemporal trajectories
+
+You can now load the jupter notebook in the command prompt and start to use it.
 
 Here is an example of how the masklets of the tracked particles look like in the ![output](exampleanimation.gif)
 
