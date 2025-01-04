@@ -16,27 +16,28 @@ Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy 
 ### -For CPU only:
 `conda install pytorch==2.5.1 torchvision torchaudio cpuonly -c pytorch`
 
-`conda install -c conda-forge ffmpeg` (This allows us to make movies of masklets in the notebook)
+-To make movies of masklets in the notebook later:
+`conda install -c conda-forge ffmpeg` 
 
-If using a Windows machine, open git bash;
+-If using a Windows machine, open git bash;
 
-Then clone Meta SAM 2 repository in the desired directory:
+-Then clone Meta SAM 2 repository in the desired directory:
 
 `git clone https://github.com/meta/SAM2.git`
 
-In the command prompt locate the SAM2 cloned directory
+-In the command prompt, locate the SAM2 cloned directory
 
 `cd sam2`
 
 `pip install -e ".[notebooks]"`
 
-Next download the most recent sam2 model checkpoints into the checkpoint directory; first use git bash (if using Windows machine), and download check points
+-Next download the most recent sam2 model checkpoints into the checkpoint directory; first, use git bash (if using a Windows machine), and download checkpoints
 
 `cd sam2/checkpoints`
 
 `./download_ckpts.sh`
 
-Alternatively directly download them:
+Alternatively, directly download them:
 
 .[sam2.1_hiera_tiny.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_tiny.pt)
 
@@ -50,9 +51,9 @@ Alternatively directly download them:
 
 `pip install -r requirements.txt`
 
--Next add the Jupyter notebook in this repository and your data folder to segment videos and analyze spatiotemporal trajectories
+-Next, add the Jupyter Notebook in this repository and your data folder to segment videos and analyze spatiotemporal trajectories
 
-You can now load the jupter notebook in the command prompt and start to use it.
+-You can now load the Jupyter notebook in the command prompt and start to use it.
 
 Here is an example of how the masklets of the tracked particles look like in the ![output](exampleanimation.gif)
 
