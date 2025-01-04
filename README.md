@@ -16,6 +16,8 @@ Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy 
 ### -For CPU only:
 `conda install pytorch==2.5.1 torchvision torchaudio cpuonly -c pytorch`
 
+`conda install -c conda-forge ffmpeg` (This allows us to make movies of masklets in the notebook)
+
 If using a Windows machine, open git bash;
 
 Then clone Meta SAM 2 repository in the desired directory:
