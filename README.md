@@ -61,3 +61,14 @@ Here is an example of how the masklets of the tracked particles look like in the
 ## Acknowledgements 
 
 This project is funded by the National Science Foundation Division of Chemical, Bioengineering, Environmental, and Transport Systems under award 2338466, the American Chemical Society Petroleum Research Fund under award 67239-DNI5, and the Georgia Tech Institute for Matter and Systems, Exponential Electronics seed grant.
+
+### Citation
+If you are using this code, please reference our paper:
+```
+@article{goel2025segment,
+  title={Segment Anything Model for Zero-shot Single Particle Tracking in Liquid Phase Transmission Electron Microscopy},
+  author={Goel, Risha and Shabeeb, Zain and Panicker, Isabel and Jamali, Vida},
+  journal={arXiv preprint arXiv:2501.03153},
+  year={2025}
+}
+```   
