@@ -1,0 +1,8 @@
+{
+  "model_checkpoint": "../checkpoints/d.pt",
+  "model_cfg": "../sam2/configs/sam2.1/sam2.1_hiera_l.yaml",
+  "point_color": "red",
+  "box_color": "#ff0000",
+  "video_dir": null,
+  "output_dir": null
+}

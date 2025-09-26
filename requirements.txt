@@ -1,7 +1,3 @@
-pandas
-scikit-image
+numpy
 pillow
-tabulate
-opencv-python
-mplcursors
-ipympl
+matplotlib

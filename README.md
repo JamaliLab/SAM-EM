@@ -1,74 +1,62 @@
-# SAM4EM
-## Zero Shot multiple particle segmentation and tracking  in liquid phase TEM
-![Banner](./banner.jpg)
+# SAM-EM
+## Comprehensive application and framework for multiple particle segmentation and tracking in liquid phase TEM
+![Banner](./images/banner.jpg)
 * * * * * *
 ## Abstract
 
-Liquid phase transmission electron microscopy (LPTEM) is an emerging microscopy technique with an unprecedented combination of spatial and temporal resolution, making it a promising method for single particle tracking. However, the lack of standardized video processing frameworks that can successfully identify and track nanoparticles moving in noisy LPTEM videos has impeded progress in the field to develop this method as a single particle tracking tool. We demonstrate the first implementation of the SAM 2 video segmentation foundation model for experimental microscopy data analysis, showing that SAM 2 successfully segments LPTEM videos in a zero-shot manner. Leveraging that, we present SAM4EM, a comprehensive suite with a promptable video segmentation module in conjunction with a particle tracking and statistical analysis module, as an end-to-end LPTEM analysis framework for single particle tracking. SAM4EM successfully segments and analyzes LPTEM videos with high accuracy compared to the state-of-the-art methods.
+The absence of robust segmentation frameworks for noisy liquid phase transmission electron microscopy (LPTEM) videos prevents reliable extraction of particle trajectories, creating a major barrier to quantitative analysis and to connecting observed dynamics with materials characterization and design. To address this challenge, we present Segment Anything Model for Electron Microscopy (SAM-EM), a domain-adapted foundation model that unifies segmentation, tracking, and statistical analysis for LPTEM data. Built on Segment Anything Model 2 (SAM-2), SAM-EM is derived through full-model fine-tuning on 46,600 curated LPTEM synthetic video frames, substantially improving mask quality and temporal identity stability compared to zero-shot SAM-2 and existing baselines. Beyond segmentation, SAM-EM integrates particle tracking with statistical tools, including mean-squared displacement and trajectory distribution analysis, providing an end-to-end framework for extracting and interpreting nanoscale dynamics. Crucially, full fine-tuning allows SAM-EM to remain robust under low signal-to-noise conditions, such as those caused by increased liquid sample thickness in LPTEM experiments. By establishing a reliable analysis pipeline, SAM-EM transforms LPTEM into a quantitative single-particle tracking platform and accelerates its integration into data-driven materials discovery and design.
 * * * * * *
 
 ## Installation
--First create a conda enviornment for SAM4EM using `conda create -n SAM4EM python=3.10`
 
--Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM4EM`. For installing SAM 2, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2). In short, first install `torch>=2.5.1`:
-### -For GPU with CUDA 11.7:
-`conda install pytorch==2.5.1 torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia`
-### -For CPU only:
-`conda install pytorch==2.5.1 torchvision torchaudio cpuonly -c pytorch`
+-First create a conda enviornment for SAM-EM using `conda create -n SAM-EM python=3.10`
 
--To make movies of masklets in the notebook later:
-`conda install -c conda-forge ffmpeg` 
+-Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM-EM`. For installing SAM 2, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2).
 
--If using a Windows machine, open git bash;
+-Then place the sam2 folder inside the sam-em root folder.
 
--Then clone Meta SAM 2 repository in the desired directory:
+-Next download our model checkpoint from the following HuggingFace link: https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main
 
-`git clone https://github.com/meta/SAM2.git`
+-Place the downloaded checkpoint into the folder labeled "checkpoints"
 
--In the command prompt, locate the SAM2 cloned directory
-
-`cd sam2`
-
-`pip install -e ".[notebooks]"`
-
--Next download the most recent sam2 model checkpoints into the checkpoint directory; first, use git bash (if using a Windows machine), and download checkpoints
-
-`cd sam2/checkpoints`
-
-`./download_ckpts.sh`
-
-Alternatively, directly download them:
-
-.[sam2.1_hiera_tiny.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_tiny.pt)
-
-.[sam2.1_hiera_small.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_small.pt)
-
-.[sam2.1_hiera_base_plus.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_base_plus.pt)
-
-.[sam2.1_hiera_large.pt](https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt)
-
--For the Particle tracking module, install the following packages using the requirements.txt file in SAM4EM git repository:
+-For the Particle tracking module, install the following packages using the requirements.txt file in SAM-EM git repository:
 
 `pip install -r requirements.txt`
 
--Next, add the Jupyter Notebook in this repository and your data folder to segment videos and analyze spatiotemporal trajectories
+-Finally, run /application/app.py
 
--You can now load the Jupyter notebook in the command prompt and start to use it.
+using `python ./application/app.py` assuming that you are in the sam-em root directory.
 
-Here is an example of how the masklets of the tracked particles look like in the ![output](exampleanimation.gif)
+This is the main screen.
 
-* * * * * *
-## Acknowledgements 
+![Main Screen](./images/main.png)
 
-This project is funded by the National Science Foundation Division of Chemical, Bioengineering, Environmental, and Transport Systems under award 2338466, the American Chemical Society Petroleum Research Fund under award 67239-DNI5, and the Georgia Tech Institute for Matter and Systems, Exponential Electronics seed grant.
+Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model.
 
-### Citation
-If you are using this code, please reference our paper:
-```
-@article{goel2025segment,
-  title={Segment Anything Model for Zero-shot Single Particle Tracking in Liquid Phase Transmission Electron Microscopy},
-  author={Goel, Risha and Shabeeb, Zain and Panicker, Isabel and Jamali, Vida},
-  journal={arXiv preprint arXiv:2501.03153},
-  year={2025}
-}
-```   
+![Config and Checkpoint Paths](./images/config_checkpoint.png)
+
+Then back in the main menu, specify the video directory which contains the video frames and the output directory. Press load video and intialize. Then select annotate frame 0, and press annotate frame.
+
+![Prompt](./images/prompt.png)
+
+
+For each particle prompt annotation, enter the particle ID starting from 0 then 1, etc. Then drag a box prompt around the particle. Press generate mask, then move on to select prompts for all other particles. When you are done, select close and save prompts. On the main screen, press propogate masks, with results being stored in the output folder. 
+
+An example video of the drawn masklets can be seen as following:
+
+![Example Video](./images/exampleanimation.gif)
+
+For the particle tracking portion of the application, click on particle tracking on the top element to get to the main screen of particle tracking.
+
+![Particle Tracking Main Screen](./images/main_traj.png)
+
+Then browse the output folder for the output csv, and press run motion analysis.
+
+![Particle Tracking Main Screen](./images/main_traj_csv.png)
+
+Finally, press view graphs.
+
+![Particle Tracking Main Screen](./images/traj_dist.png)
+
+
+
