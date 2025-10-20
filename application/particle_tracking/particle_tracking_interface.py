@@ -46,10 +46,15 @@ class ParticleTrackingUI:
         self.output_dir_entry.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
         ctk.CTkButton(step1_frame, text="Select Output Folder", command=self.browse_output_dir).grid(row=2, column=1, padx=5, pady=5)
 
-        ctk.CTkButton(step1_frame, text="Generate CSV", command=self.generate_csv).grid(row=3, column=0, columnspan=2, pady=10)
+        self.generate_btn = ctk.CTkButton(step1_frame, text="Generate CSV", command=self.generate_csv)
+        self.generate_btn.grid(row=3, column=0, columnspan=2, pady=10)
 
+        # CSV generation progress + status bar
+        self.step1_progress = ctk.CTkProgressBar(step1_frame)
+        self.step1_progress.grid(row=4, column=0, columnspan=2, padx=10, sticky="ew")
+        self.step1_progress.set(0)
         self.step1_status = ctk.CTkLabel(step1_frame, text="", text_color="gray")
-        self.step1_status.grid(row=4, column=0, columnspan=2, pady=5)
+        self.step1_status.grid(row=5, column=0, columnspan=2, pady=5)
 
         # Step 2: Motion analysis
         step2_frame = ctk.CTkFrame(self.parent)
@@ -60,13 +65,25 @@ class ParticleTrackingUI:
         self.csv_input_entry = ctk.CTkEntry(step2_frame, width=350)
         self.csv_input_entry.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         ctk.CTkButton(step2_frame, text="Browse CSV", command=self.browse_input_csv).grid(row=1, column=1, padx=5, pady=5)
-        ctk.CTkButton(step2_frame, text="Run Motion Analysis", command=self.run_analysis).grid(row=2, column=0, pady=10, padx=10, sticky="w")
+
+        # Experiment inputs
+        ctk.CTkLabel(step2_frame, text="Spatial Scale (nm/pixel):").grid(row=2, column=0, sticky="w", padx=10)
+        self.scale_entry = ctk.CTkEntry(step2_frame, width=120)
+        self.scale_entry.grid(row=2, column=1, sticky="w", padx=5)
+        self.scale_entry.insert(0, str(getattr(self.app, "nm_per_pixel", 1.0)))
+
+        ctk.CTkLabel(step2_frame, text="Frame Rate (FPS):").grid(row=3, column=0, sticky="w", padx=10)
+        self.fps_entry = ctk.CTkEntry(step2_frame, width=120)
+        self.fps_entry.grid(row=3, column=1, sticky="w", padx=5)
+        self.fps_entry.insert(0, str(getattr(self.app, "fps", 1.0)))
+
+        ctk.CTkButton(step2_frame, text="Run Motion Analysis", command=self.run_analysis).grid(row=4, column=0, pady=10, padx=10, sticky="w")
         self.last_figs = {}
         self.view_btn = ctk.CTkButton(step2_frame, text="View Graphs", command=self.open_plots_window, state=ctk.DISABLED)
-        self.view_btn.grid(row=2, column=1, pady=10, padx=5, sticky="e")
+        self.view_btn.grid(row=4, column=1, pady=10, padx=5, sticky="e")
 
         self.step2_status = ctk.CTkLabel(step2_frame, text="", text_color="gray")
-        self.step2_status.grid(row=3, column=0, columnspan=2, pady=5)
+        self.step2_status.grid(row=5, column=0, columnspan=2, pady=5)
 
     # ---------- File pickers ----------
     def browse_npz_dir(self):
@@ -176,45 +193,78 @@ class ParticleTrackingUI:
             CTkMessagebox(title="Error", message="Please select NPZ folder and output folder.", icon="cancel")
             return
 
-        os.makedirs(out_dir, exist_ok=True)
-        csv_path = os.path.join(out_dir, "trajectories.csv")
-
-        rows, skipped = [], []
-        for fname in sorted(os.listdir(npz_dir)):
-            if not fname.lower().endswith(".npz"):
-                continue
-            fpath = os.path.join(npz_dir, fname)
-            try:
-                frame_idx, masks = self._extract_masks_from_npz(fpath)
-                if not masks:
-                    skipped.append(f"{fname} (no masks found)")
-                    continue
-
-                for pid, m in masks:
-                    lbl = cc_label(m)
-                    for comp in regionprops(lbl):
-                        cy, cx = comp.centroid
-                        angle_deg = float(np.degrees(getattr(comp, "orientation", 0.0)))
-                        rows.append([frame_idx, int(pid), float(cx), float(cy), angle_deg])
-            except Exception as e:
-                skipped.append(f"{fname} ({e})")
-
-        if not rows:
-            msg = "No trajectories were written."
-            if skipped:
-                msg += "\n\nSkipped files:\n" + "\n".join(skipped[:20])
-            CTkMessagebox(title="No Data", message=msg, icon="warning")
+        # Ensure output directory consistency
+        try:
+            os.makedirs(out_dir, exist_ok=True)
+        except Exception as e:
+            CTkMessagebox(title="Error", message=f"Could not create output folder:\n{e}", icon="cancel")
             return
 
-        df = pd.DataFrame(rows, columns=["frame", "particle_id", "x", "y", "angle"])
-        df.sort_values(["particle_id", "frame"], inplace=True)
-        df.to_csv(csv_path, index=False)
+        # Show progress
+        self.generate_btn.configure(state=ctk.DISABLED)
+        self.step1_progress.set(0)
+        self.step1_status.configure(text="Generating CSV...", text_color="gray")
 
-        self.csv_path = csv_path
-        note = f"CSV saved to output directory!"
-        if skipped:
-            note += f"\nSkipped {len(skipped)} file(s)."
-        self.step1_status.configure(text=note, text_color="green")
+        # Run in background
+        import threading
+        def worker():
+            csv_path = os.path.join(out_dir, "trajectories.csv")
+            rows, skipped = [], []
+            try:
+                npz_files = [f for f in sorted(os.listdir(npz_dir)) if f.lower().endswith('.npz')]
+                total = max(1, len(npz_files))
+                for i, fname in enumerate(npz_files, start=1):
+                    fpath = os.path.join(npz_dir, fname)
+                    try:
+                        frame_idx, masks = self._extract_masks_from_npz(fpath)
+                        if not masks:
+                            skipped.append(f"{fname} (no masks found)")
+                        else:
+                            for pid, m in masks:
+                                lbl = cc_label(m)
+                                for comp in regionprops(lbl):
+                                    cy, cx = comp.centroid
+                                    angle_deg = float(np.degrees(getattr(comp, 'orientation', 0.0)))
+                                    rows.append([frame_idx, int(pid), float(cx), float(cy), angle_deg])
+                    except Exception as e:
+                        skipped.append(f"{fname} ({e})")
+
+                    prog = i / total
+                    self.parent.after(0, lambda p=prog, i=i, t=total: (
+                        self.step1_progress.set(p),
+                        self.step1_status.configure(text=f"Processing {i}/{t}...")
+                    ))
+
+                if not rows:
+                    msg = "No trajectories were written."
+                    if skipped:
+                        msg += "\n\nSkipped files:\n" + "\n".join(skipped[:20])
+                    def no_rows():
+                        self.generate_btn.configure(state=ctk.NORMAL)
+                        self.step1_status.configure(text=msg, text_color='orange')
+                    self.parent.after(0, no_rows)
+                    return
+
+                df = pd.DataFrame(rows, columns=["frame", "particle_id", "x", "y", "angle"])
+                df.sort_values(["particle_id", "frame"], inplace=True)
+                df.to_csv(csv_path, index=False)
+
+                def done():
+                    self.csv_path = csv_path
+                    note = "CSV saved to output directory!"
+                    if skipped:
+                        note += f"\nSkipped {len(skipped)} file(s)."
+                    self.step1_progress.set(1)
+                    self.step1_status.configure(text=note, text_color="green")
+                    self.generate_btn.configure(state=ctk.NORMAL)
+                self.parent.after(0, done)
+            except Exception as e:
+                def fail():
+                    self.step1_status.configure(text=f"Failed to generate CSV: {e}", text_color='red')
+                    self.generate_btn.configure(state=ctk.NORMAL)
+                self.parent.after(0, fail)
+
+        threading.Thread(target=worker, daemon=True).start()
 
     # ---------- Analysis + Plots ----------
     def _apply_dark(self, ax):
@@ -265,9 +315,15 @@ class ParticleTrackingUI:
             return
         df.sort_values(["particle_id", "frame"], inplace=True)
 
-        # Timing: fps from entry or default 1.0
+        # Scaling: spatial (nm/pixel) and timing (FPS)
         try:
-            fps = float(getattr(self, "fps_entry", None).get()) if hasattr(self, "fps_entry") else 1.0
+            scale_nm_per_px = float(self.scale_entry.get()) if hasattr(self, "scale_entry") else 1.0
+            if scale_nm_per_px <= 0:
+                scale_nm_per_px = 1.0
+        except Exception:
+            scale_nm_per_px = 1.0
+        try:
+            fps = float(self.fps_entry.get()) if hasattr(self, "fps_entry") else 1.0
             fps = fps if fps > 0 else 1.0
         except Exception:
             fps = 1.0
@@ -302,12 +358,12 @@ class ParticleTrackingUI:
         all_abs = []
         for pid in pids:
             g = df[df["particle_id"] == pid]
-            x = g["x"].to_numpy()
-            y = g["y"].to_numpy()
+            x = g["x"].to_numpy() * scale_nm_per_px
+            y = g["y"].to_numpy() * scale_nm_per_px
             if len(x) < 2:
                 continue
             r = np.sqrt(x**2 + y**2)
-            disp_r = np.diff(r)  # Δr between frames
+            disp_r = np.diff(r)  # Δr between frames (nm)
             all_abs.append(np.abs(disp_r))
 
             # emulate your plot_hist(.., color=cmap_custom(pid))
@@ -317,7 +373,7 @@ class ParticleTrackingUI:
             )
 
         # axis labels & look
-        ax_dist.set_xlabel("Δr", fontsize=20)
+        ax_dist.set_xlabel("Δr (nm)", fontsize=20)
         ax_dist.set_ylabel("Normalized PDF", fontsize=20)
         ax_dist.set_title("Distribution of Displacements", fontsize=20)
 
@@ -345,8 +401,8 @@ class ParticleTrackingUI:
 
         for pid in pids:
             g = df[df["particle_id"] == pid]
-            x = g["x"].to_numpy()
-            y = g["y"].to_numpy()
+            x = g["x"].to_numpy() * scale_nm_per_px
+            y = g["y"].to_numpy() * scale_nm_per_px
             if len(x) < 3:
                 continue
             taus, msd_vals = msd_xy(x, y)
@@ -370,7 +426,7 @@ class ParticleTrackingUI:
         last_scat = None
         for pid in pids:
             g = df[df["particle_id"] == pid]
-            x = g["x"].to_numpy(); y = g["y"].to_numpy()
+            x = g["x"].to_numpy() * scale_nm_per_px; y = g["y"].to_numpy() * scale_nm_per_px
             if len(x) < 2:
                 continue
             t = np.linspace(0, (len(g)-1)*dt, len(g))
@@ -391,8 +447,8 @@ class ParticleTrackingUI:
             cbar.ax.tick_params(colors="white", labelsize=16)
             cbar.outline.set_edgecolor("white")
 
-        ax_traj.set_xlabel('x', fontsize=20)
-        ax_traj.set_ylabel('y', fontsize=20)
+        ax_traj.set_xlabel('x (nm)', fontsize=20)
+        ax_traj.set_ylabel('y (nm)', fontsize=20)
         ax_traj.set_title("Trajectories", fontsize=20)
         ax_traj.set_aspect('equal', 'datalim')
         ax_traj.invert_yaxis()  # match your snippet
@@ -418,11 +474,11 @@ class ParticleTrackingUI:
         max_lag = 50
         for pid in pids:
             g = df[df["particle_id"] == pid]
-            x = g["x"].to_numpy(); y = g["y"].to_numpy()
+            x = g["x"].to_numpy() * scale_nm_per_px; y = g["y"].to_numpy() * scale_nm_per_px
             if len(x) < 3:
                 continue
             r = np.sqrt(x**2 + y**2)
-            v_r = np.diff(r) / dt  # radial velocity
+            v_r = np.diff(r) / dt  # radial velocity (nm/s)
             z = norm_autocorr(v_r)
             L = min(max_lag, len(z)-1)
             ax_acf.plot(np.arange(0, L), z[:L], color=pid_to_color[pid], lw=2)

@@ -45,6 +45,8 @@ class SettingsWindow(ctk.CTkToplevel):
         self.model_cfg_var = ctk.StringVar(value=self.master_app.model_cfg)
         self.point_color_var = ctk.StringVar(value=self.master_app.point_color)
         self.box_color_var = ctk.StringVar(value=self.master_app.box_color)
+        self.nm_per_pixel_var = ctk.StringVar(value=str(self.master_app.nm_per_pixel))
+        self.fps_var = ctk.StringVar(value=str(self.master_app.fps))
 
         self._setup_widgets()
 
@@ -79,6 +81,17 @@ class SettingsWindow(ctk.CTkToplevel):
         self.box_color_label.grid(row=1, column=1, sticky="w")
         ctk.CTkButton(color_frame, text="Choose...", command=lambda: self.choose_color(self.box_color_var, self.box_color_label)).grid(row=1, column=2, padx=10)
 
+        # Experiment settings
+        exp_frame = ctk.CTkFrame(main_frame)
+        exp_frame.pack(fill=ctk.X, pady=5)
+        exp_frame.grid_columnconfigure(1, weight=1)
+
+        ctk.CTkLabel(exp_frame, text="Spatial Scale (nm/pixel):").grid(row=0, column=0, sticky="w", padx=10, pady=5)
+        ctk.CTkEntry(exp_frame, textvariable=self.nm_per_pixel_var).grid(row=0, column=1, sticky="ew", padx=5)
+
+        ctk.CTkLabel(exp_frame, text="Frame Rate (FPS):").grid(row=1, column=0, sticky="w", padx=10, pady=5)
+        ctk.CTkEntry(exp_frame, textvariable=self.fps_var).grid(row=1, column=1, sticky="ew", padx=5)
+
         # Actions
         button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
         button_frame.pack(fill=ctk.X, pady=(10, 0))
@@ -102,6 +115,18 @@ class SettingsWindow(ctk.CTkToplevel):
         self.master_app.model_cfg = self.model_cfg_var.get()
         self.master_app.point_color = self.point_color_var.get()
         self.master_app.box_color = self.box_color_var.get()
+        try:
+            self.master_app.nm_per_pixel = float(self.nm_per_pixel_var.get())
+            if self.master_app.nm_per_pixel <= 0:
+                self.master_app.nm_per_pixel = 1.0
+        except Exception:
+            self.master_app.nm_per_pixel = 1.0
+        try:
+            self.master_app.fps = float(self.fps_var.get())
+            if self.master_app.fps <= 0:
+                self.master_app.fps = 1.0
+        except Exception:
+            self.master_app.fps = 1.0
 
         self.master_app._save_settings()
 
@@ -326,6 +351,9 @@ class MaskApp:
         self.model_cfg = "../sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml"
         self.point_color = 'red'
         self.box_color = 'green'
+        # Experiment defaults
+        self.nm_per_pixel = 1.0 
+        self.fps = 1.0        
 
         # Runtime
         self.backend: MaskComponent | None = None
@@ -360,6 +388,14 @@ class MaskApp:
                 self.box_color = data.get("box_color", self.box_color)
                 self.video_dir = data.get("video_dir", self.video_dir)
                 self.output_dir = data.get("output_dir", self.output_dir)
+                try:
+                    self.nm_per_pixel = float(data.get("nm_per_pixel", self.nm_per_pixel))
+                except Exception:
+                    pass
+                try:
+                    self.fps = float(data.get("fps", self.fps))
+                except Exception:
+                    pass
         except Exception as e:
             CTkMessagebox(title="Settings", message=f"Could not load settings file:\n{e}", icon="warning")
 
@@ -372,6 +408,8 @@ class MaskApp:
             "box_color": self.box_color,
             "video_dir": self.video_dir,
             "output_dir": self.output_dir,
+            "nm_per_pixel": self.nm_per_pixel,
+            "fps": self.fps,
         }
         try:
             with self.SETTINGS_PATH.open("w", encoding="utf-8") as f:
