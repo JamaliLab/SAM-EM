@@ -59,4 +59,19 @@ Finally, press view graphs.
 ![Particle Tracking Main Screen](./images/traj_dist.png)
 
 
+## Acknowledgements
 
+This research was supported by the NSF, Division of Chemical, Bioengineering, Environmental, and Transport Systems under award 2338466, Georgia Tech Institute for Matter and Systems, Exponential Electronics seed grant, the American Chemical Society Petroleum Research Fund under award 67239-DNI5, and the Exponential Electronics Seed grant of the Institute for Matter and Systems at Georgia Tech. The authors acknowledge the support of the Material Characterization Facility and the Electron Microscopy Facility of the Institute for Matter and Systems at Georgia Tech.
+
+## Citation
+
+If you are using this code, please reference our paper:
+```
+@inproceedings{wang2025samem,
+  title        = {SAM-EM: Real-Time Segmentation for Automated Liquid Phase Transmission Electron Microscopy},
+  author       = {Wang, Alexander and Xu, Max and Goel, Risha and Shabeeb, Zain and Panicker, Isabel and Jamali, Vida},
+  booktitle    = {NeurIPS 2025 Workshop on AI4Mat: AI for Accelerated Materials Design},
+  year         = {2025},
+  organization = {Neural Information Processing Systems Foundation},
+  url          = {https://github.com/JamaliLab/SAM-EM}
+}
