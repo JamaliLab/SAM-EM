@@ -35,7 +35,7 @@ This is the main screen.
 
 ## Usage
 
-Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model.
+Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model. To use SAM-EM's checkpoint, download 'SAM-EMCheckpoint.pt' from the repository.
 
 ![Config and Checkpoint Paths](./images/config_checkpoint.png)
 
@@ -80,3 +80,8 @@ If you are using this code, please reference our paper:
   url          = {https://github.com/JamaliLab/SAM-EM}
 }
 -->
+
+* * * * * *
+
+## Model Training
+-To conduct training in accordance with the procedure established in the paper, utilize the 'finalconfig.yaml' configuration file in the training process to establish training parameters and other configurations appropriately.
