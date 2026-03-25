@@ -35,7 +35,7 @@ This is the main screen.
 
 ## Usage
 
-Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model. To use SAM-EM's checkpoint, download 'SAM-EMCheckpoint.pt' (within main branch of repository).
+Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model. To use SAM-EM's checkpoint, download 'SAM-EMCheckpoint.pt' from our Hugging Face repository.
 
 ![Config and Checkpoint Paths](./images/config_checkpoint.png)
 
