@@ -15,7 +15,7 @@ The absence of robust segmentation frameworks for noisy liquid phase transmissio
 
 -Then place the sam2 folder inside the sam-em root folder.
 
--Next download our model checkpoint from the following HuggingFace link: https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main
+-Next download our model checkpoint from the following HuggingFace link: https://huggingface.co/datasets/papertemp/SAM-EM-Paper-PublicData/tree/main
 
 -Place the downloaded checkpoint into the folder labeled "checkpoints"
 
