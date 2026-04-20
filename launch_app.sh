@@ -67,10 +67,6 @@ if [ ! -d "$ENV_DIR" ]; then
     fi
 
     echo
-    echo "Installing SAM-2 package..."
-    "$CONDA_EXE" run -n SAM-EM-app pip install -e "$SCRIPT_DIR/sam2" --quiet
-
-    echo
     echo "Setup complete!"
     echo
 fi
