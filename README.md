@@ -54,27 +54,9 @@ This is the main screen.
 
 ![Main Screen](./images/main.png)
 
-Before loading a video, click the **gear icon** (top-right) to set two paths:
+The checkpoint and config paths are detected automatically. If you followed the steps above (checkpoint in `checkpoints/`, config yaml in the repo root), everything should work out of the box. The gear icon (top-right) can be used to override these paths if needed.
 
-- **Checkpoint (.pt):** Browse to the `finetuned_sam2.1.pt` file you downloaded from HuggingFace and placed in the `checkpoints/` folder.
-- **Config (.yaml):** This file is installed automatically with the SAM-2 package inside your conda environment. Browse to it at:
-  - **Windows:** `C:\Users\<your-username>\Miniconda3\envs\SAM-EM-app\Lib\site-packages\sam2\configs\sam2.1\sam2.1_hiera_l.yaml`
-  - **Mac:** `~/miniconda3/envs/SAM-EM-app/lib/python3.10/site-packages/sam2/configs/sam2.1/sam2.1_hiera_l.yaml`
-
-  Replace `<your-username>` with your actual username. If you installed Anaconda instead of Miniconda, replace `Miniconda3` with `anaconda3`.
-
-  **Tip:** If you are unsure where the config file is, open a terminal, activate the environment, and run:
-  ```bash
-  conda activate SAM-EM-app
-  python -c "import sam2, os; print(os.path.join(os.path.dirname(sam2.__file__), 'configs', 'sam2.1', 'sam2.1_hiera_l.yaml'))"
-  ```
-  This will print the full path you need.
-  
-These paths are saved automatically and only need to be set once.
-
-![Config and Checkpoint Paths](./images/config_checkpoint.png)
-
-Back in the main menu, specify the video directory which contains the video frames and the output directory. Press load video and initialize. Then select annotate frame 0, and press annotate frame.
+Specify the video directory which contains the video frames and the output directory. Press load video and initialize. Then select annotate frame 0, and press annotate frame.
 
 ![Prompt](./images/prompt.png)
 
