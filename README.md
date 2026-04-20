@@ -13,6 +13,7 @@ The absence of robust segmentation frameworks for noisy liquid phase transmissio
 
 - **Miniconda** (or Anaconda) must be installed on your machine. Download it from [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html).
 - Download the SAM-EM model checkpoint from HuggingFace: [https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main](https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main) and place it in the `checkpoints/` folder inside the repository.
+- Clone this repository (SAM-EM) as follows: `git clone https://github.com/JamaliLab/SAM-EM.git`
 
 ### Quick Launch (Recommended)
 
