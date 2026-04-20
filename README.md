@@ -41,7 +41,7 @@ If you prefer to set up the environment yourself:
 ```bash
 conda env create -f environment_app.yml
 conda activate SAM-EM-app
-pip install -e ./sam2
+pip install git+https://github.com/facebookresearch/sam2.git
 ```
 
 Then launch the application from the `application/` directory:
