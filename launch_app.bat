@@ -49,13 +49,6 @@ if not exist "%ENV_DIR%" (
     )
 
     echo.
-    echo Installing SAM-2 package...
-    "%CONDA_EXE%" run -n SAM-EM-app pip install -e "%~dp0sam2" --quiet
-    if errorlevel 1 (
-        echo WARNING: SAM-2 install reported issues. Continuing...
-    )
-
-    echo.
     echo ============================================
     echo   Setup complete! Launching SAM-EM...
     echo ============================================
