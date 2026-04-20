@@ -22,7 +22,7 @@ The launchers below will automatically create the `SAM-EM-app` conda environment
 
 Double-click `launch_app.bat`. A terminal window will appear showing setup progress on the first run, then the application will open.
 
-**Mac / Linux**
+**Mac**
 
 Open a terminal in the repository folder and run:
 
