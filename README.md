@@ -2,40 +2,59 @@
 ## Comprehensive application and framework for multiple particle segmentation and tracking in liquid phase TEM
 ![Banner](./images/banner.jpg)
 * * * * * *
-<!--
 ## Abstract
 
 The absence of robust segmentation frameworks for noisy liquid phase transmission electron microscopy (LPTEM) videos prevents reliable extraction of particle trajectories, creating a major barrier to quantitative analysis and to connecting observed dynamics with materials characterization and design. To address this challenge, we present Segment Anything Model for Electron Microscopy (SAM-EM), a domain-adapted foundation model that unifies segmentation, tracking, and statistical analysis for LPTEM data. Built on Segment Anything Model 2 (SAM-2), SAM-EM is derived through full-model fine-tuning on 46,600 curated LPTEM synthetic video frames, substantially improving mask quality and temporal identity stability compared to zero-shot SAM-2 and existing baselines. Beyond segmentation, SAM-EM integrates particle tracking with statistical tools, including mean-squared displacement and trajectory distribution analysis, providing an end-to-end framework for extracting and interpreting nanoscale dynamics. Crucially, full fine-tuning allows SAM-EM to remain robust under low signal-to-noise conditions, such as those caused by increased liquid sample thickness in LPTEM experiments. By establishing a reliable analysis pipeline, SAM-EM transforms LPTEM into a quantitative single-particle tracking platform and accelerates its integration into data-driven materials discovery and design.
--->
+* * * * * *
+
 ## Installation
 
--First create a conda enviornment for SAM-EM using `conda create -n SAM-EM python=3.10`
+### Prerequisites
 
--Next install the Meta Segment Anything Model 2 (SAM 2) module inside this envirnment by activating your environment first `conda activate SAM-EM`. For installing SAM 2, follow the installations on the [SAM 2 github repository](https://github.com/facebookresearch/sam2).
+- **Miniconda** (or Anaconda) must be installed on your machine. Download it from [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html).
+- Download the SAM-EM model checkpoint from HuggingFace: [https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main](https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main) and place it in the `checkpoints/` folder inside the repository.
 
--Then place the sam2 folder inside the sam-em root folder.
+### Quick Launch (Recommended)
 
--Next download our model checkpoint from the following HuggingFace link: https://huggingface.co/datasets/papertemp/SAM-EM-Paper-PublicData/tree/main
+The launchers below will automatically create the `SAM-EM-app` conda environment and install all dependencies on the first run (~2–3 GB, 5–15 minutes). Subsequent launches open the app directly.
 
--Place the downloaded checkpoint into the folder labeled "checkpoints"
+**Windows**
 
--For the Particle tracking module, install the following packages using the requirements.txt file in SAM-EM git repository:
+Double-click `launch_app.bat`. A terminal window will appear showing setup progress on the first run, then the application will open.
 
-`pip install -r requirements.txt`
+**Mac / Linux**
 
--Finally, run /application/app.py
+Open a terminal in the repository folder and run:
 
-using `python ./application/app.py` assuming that you are in the sam-em root directory.
+```bash
+chmod +x launch_app.sh
+./launch_app.sh
+```
+
+On Mac, `chmod +x` only needs to be done once. After that you can also right-click the file in Finder → Open With → Terminal.
+
+### Manual Installation
+
+If you prefer to set up the environment yourself:
+
+```bash
+conda env create -f environment_app.yml
+conda activate SAM-EM-app
+pip install -e ./sam2
+```
+
+Then launch the application from the `application/` directory:
+
+```bash
+cd application
+python app.py
+```
 
 This is the main screen.
 
 ![Main Screen](./images/main.png)
 
-* * * * * *
-
-## Usage
-
-Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model. To use SAM-EM's checkpoint, download 'SAM-EMCheckpoint.pt' from our Hugging Face repository.
+Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model.
 
 ![Config and Checkpoint Paths](./images/config_checkpoint.png)
 
@@ -61,6 +80,7 @@ Then browse the output folder for the output csv, and press run motion analysis.
 Finally, press view graphs.
 
 ![Particle Tracking Main Screen](./images/traj_dist.png)
+
 
 <!--
 ## Acknowledgements
