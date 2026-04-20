@@ -36,7 +36,7 @@ set "PYTHON_EXE=%ENV_DIR%\python.exe"
 REM ── First-time setup: create environment if it does not exist ────────────────
 if not exist "%ENV_DIR%" (
     echo First-time setup: creating the SAM-EM environment.
-    echo This downloads ~2-3 GB and takes 5-15 minutes.
+    echo This downloads packages and takes 5-15 minutes.
     echo Please wait and do NOT close this window.
     echo.
 
