@@ -17,7 +17,7 @@ The absence of robust segmentation frameworks for noisy liquid phase transmissio
 
 ### Quick Launch (Recommended)
 
-The launchers below will automatically create the `SAM-EM-app` conda environment and install all dependencies on the first run (~2–3 GB, 5–15 minutes). Subsequent launches open the app directly.
+The launchers below will automatically create the `SAM-EM-app` conda environment and install all dependencies on the first run (5–15 minutes). Subsequent launches open the app directly.
 
 **Windows**
 
@@ -55,7 +55,7 @@ This is the main screen.
 
 ![Main Screen](./images/main.png)
 
-Click the gear icon in the top right to specify the location of the checkpoint and config file for the finetuned model.
+The checkpoint and config paths are detected automatically. If you need to override them (e.g. you moved the checkpoint to a different folder), click the gear icon in the top right.
 
 ![Config and Checkpoint Paths](./images/config_checkpoint.png)
 
