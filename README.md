@@ -12,6 +12,8 @@ The absence of robust segmentation frameworks for noisy liquid phase transmissio
 ### Prerequisites
 
 - **Miniconda** (or Anaconda) must be installed on your machine. Download it from [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html).
+- **Git** must be installed. On Mac it comes with Xcode Command Line Tools (you may be prompted to install these on first run). On Windows, download from [https://git-scm.com](https://git-scm.com).
+- An **NVIDIA GPU** with CUDA support is recommended for fast inference. The application will run on CPU but significantly slower. The launcher scripts automatically detect your GPU and install the appropriate version of PyTorch.
 - Download the SAM-EM model checkpoint from HuggingFace: [https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main](https://huggingface.co/sam-em-paper/finetuned-checkpoint/tree/main) and place it in the `checkpoints/` folder inside the repository.
 - Clone this repository (SAM-EM): `git clone https://github.com/JamaliLab/SAM-EM.git`. Subsequent installation steps should be completed within the resulting directory unless otherwise specified.
 
@@ -36,11 +38,20 @@ On Mac, `chmod +x` only needs to be done once. After that you can also right-cli
 
 ### Manual Installation
 
-If you prefer to set up the environment yourself:
+If you prefer to set up the environment yourself rather than using the launcher scripts:
 
 ```bash
-conda env create -f environment_app.yml
+conda create -n SAM-EM-app python=3.10 pip -y
 conda activate SAM-EM-app
+pip install torch torchvision
+pip install "sam-2 @ git+https://github.com/facebookresearch/sam2.git"
+pip install numpy pillow matplotlib scikit-image pandas hydra-core iopath omegaconf tqdm customtkinter CTkMessagebox CTkColorPicker
+```
+
+If you have an NVIDIA GPU and want CUDA support, replace the `pip install torch torchvision` line with:
+
+```bash
+pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu121
 ```
 
 Then launch the application from the `application/` directory:
