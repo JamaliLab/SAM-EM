@@ -347,8 +347,13 @@ class MaskApp:
         self.SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
 
         # Config defaults (user can change in Settings)
-        self.model_checkpoint = "../checkpoints/finetuned_sam2.1.pt"
-        self.model_cfg = "../sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml"
+        self.model_checkpoint = str(self.APP_DIR.parent / "checkpoints" / "finetuned_sam2.1.pt")
+        # Resolve config from the installed sam2 package
+        try:
+            import sam2 as _sam2_pkg
+            self.model_cfg = str(Path(_sam2_pkg.__file__).parent / "configs" / "sam2.1" / "sam2.1_hiera_l.yaml")
+        except ImportError:
+            self.model_cfg = "../sam2/configs/sam2.1/sam2.1_hiera_l.yaml"
         self.point_color = 'red'
         self.box_color = 'green'
         # Experiment defaults
