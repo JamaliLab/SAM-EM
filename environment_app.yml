@@ -1,0 +1,27 @@
+name: SAM-EM-app
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    # PyTorch with CUDA 12.1 — change cu121 to match your CUDA version,
+    # or remove the +cu121 suffix and the --extra-index-url line for CPU-only.
+    - --extra-index-url https://download.pytorch.org/whl/cu121
+    - torch==2.5.1+cu121
+    - torchvision==0.20.1+cu121
+    # Core scientific stack
+    - numpy
+    - pillow
+    - matplotlib
+    - scikit-image
+    - pandas
+    # SAM-2 dependencies
+    - hydra-core
+    - iopath
+    - omegaconf
+    - tqdm
+    # GUI
+    - customtkinter
+    - CTkMessagebox
+    - CTkColorPicker
