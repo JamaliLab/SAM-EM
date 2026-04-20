@@ -51,7 +51,7 @@ pip install numpy pillow matplotlib scikit-image pandas hydra-core iopath omegac
 If you have an NVIDIA GPU and want CUDA support, replace the `pip install torch torchvision` line with:
 
 ```bash
-pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 ```
 
 Then launch the application from the `application/` directory:
