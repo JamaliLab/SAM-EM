@@ -352,6 +352,13 @@ class MaskApp:
         pt_files = list(ckpt_dir.glob("*.pt")) if ckpt_dir.is_dir() else []
         if len(pt_files) == 1:
             self.model_checkpoint = str(pt_files[0])
+        elif len(pt_files) > 1:
+            self.model_checkpoint = str(pt_files[0])
+            self._multiple_ckpts_warning = (
+                f"Multiple .pt files found in checkpoints/.\n"
+                f"Using: {pt_files[0].name}\n\n"
+                f"To use a different checkpoint, open Settings (gear icon)."
+            )
         else:
             self.model_checkpoint = str(ckpt_dir / "finetuned_sam2.1.pt")
         self.model_cfg = str(self.APP_DIR.parent / "sam2.1_hiera_l.yaml")
@@ -377,6 +384,14 @@ class MaskApp:
         self.cmap_custom = ListedColormap(self.colors_custom, name="cmap_custom")
 
         self._build_ui()
+
+        # Show warning if multiple checkpoints were found
+        if hasattr(self, '_multiple_ckpts_warning'):
+            self.root.after(500, lambda: CTkMessagebox(
+                title="Multiple Checkpoints",
+                message=self._multiple_ckpts_warning,
+                icon="warning"
+            ))
 
     def on_close(self):
         self.root.destroy()
