@@ -347,7 +347,13 @@ class MaskApp:
         self.SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
 
         # Config defaults (user can change in Settings)
-        self.model_checkpoint = str(self.APP_DIR.parent / "checkpoints" / "finetuned_sam2.1.pt")
+        # Auto-detect checkpoint: use the single .pt file in checkpoints/
+        ckpt_dir = self.APP_DIR.parent / "checkpoints"
+        pt_files = list(ckpt_dir.glob("*.pt")) if ckpt_dir.is_dir() else []
+        if len(pt_files) == 1:
+            self.model_checkpoint = str(pt_files[0])
+        else:
+            self.model_checkpoint = str(ckpt_dir / "finetuned_sam2.1.pt")
         self.model_cfg = str(self.APP_DIR.parent / "sam2.1_hiera_l.yaml")
         self.point_color = 'red'
         self.box_color = 'green'
