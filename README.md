@@ -36,6 +36,8 @@ chmod +x launch_app.sh
 
 On Mac, `chmod +x` only needs to be done once. After that you can also right-click the file in Finder → Open With → Terminal.
 
+Note: On Apple Silicon Macs (M1/M2/M3), you must use the ARM version of Miniconda (labeled "Apple M1" or "arm64"), not the Intel version.
+
 ### Manual Installation
 
 If you prefer to set up the environment yourself rather than using the launcher scripts:
