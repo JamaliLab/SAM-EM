@@ -45,15 +45,15 @@ If you prefer to set up the environment yourself rather than using the launcher 
 ```bash
 conda create -n SAM-EM-app python=3.10 pip -y
 conda activate SAM-EM-app
-pip install torch torchvision
+pip install torch==2.5.1 torchvision==0.20.1  # CPU
 pip install "sam-2 @ git+https://github.com/facebookresearch/sam2.git"
-pip install numpy pillow matplotlib scikit-image pandas hydra-core iopath omegaconf tqdm customtkinter CTkMessagebox CTkColorPicker
+pip install numpy==2.3.3 pillow==11.3.0 matplotlib==3.10.6 scikit-image==0.25.2 pandas==2.3.3 hydra-core iopath omegaconf tqdm customtkinter CTkMessagebox CTkColorPicker
 ```
 
-If you have an NVIDIA GPU and want CUDA support, replace the `pip install torch torchvision` line with:
+If you have an NVIDIA GPU and want CUDA support, replace the `pip install torch==2.5.1 torchvision==0.20.1 ` line with:
 
 ```bash
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu121  # GPU
 ```
 
 Then launch the application from the `application/` directory:
