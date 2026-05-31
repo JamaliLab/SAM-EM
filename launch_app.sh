@@ -61,7 +61,7 @@ if [ ! -d "$ENV_DIR" ]; then
 
     echo
     echo "Installing PyTorch..."
-    "$PIP_EXE" install torch torchvision
+    "$PIP_EXE" install torch==2.5.1 torchvision==0.20.1
     if [ $? -ne 0 ]; then
         echo "ERROR: Failed to install PyTorch."
         read -p "Press Enter to exit..."
