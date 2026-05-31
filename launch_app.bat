@@ -75,8 +75,7 @@ if errorlevel 1 (
 
     echo.
     echo Installing remaining dependencies...
-    "%PIP_EXE%" install numpy pillow matplotlib scikit-image pandas hydra-core iopath omegaconf tqdm customtkinter CTkMessagebox CTkColorPicker
-    if errorlevel 1 (
+    "%PIP_EXE%" install numpy==2.3.3 pillow==11.3.0 matplotlib==3.10.6 scikit-image==0.25.2 pandas==2.3.3 hydra-core omegaconf tqdm customtkinter CTkMessagebox CTkColorPicker    if errorlevel 1 (
         echo ERROR: Failed to install dependencies.
         goto :end
     )
