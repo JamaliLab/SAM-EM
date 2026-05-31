@@ -54,10 +54,10 @@ nvidia-smi >nul 2>&1
 
 if errorlevel 1 (
     echo No NVIDIA GPU detected. Installing CPU-only PyTorch...
-    "%PIP_EXE%" install torch torchvision
+    "%PIP_EXE%" install torch==2.5.1 torchvision==0.20.1
 ) else (
     echo NVIDIA GPU detected. Installing PyTorch with CUDA support...
-    "%PIP_EXE%" install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+    "%PIP_EXE%" install torch==2.5.1+cu121 torchvision==0.20.1+cu121 --index-url https://download.pytorch.org/whl/cu121
 )
 
 if errorlevel 1 (
