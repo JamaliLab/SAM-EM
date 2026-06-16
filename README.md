@@ -53,7 +53,7 @@ pip install numpy==2.3.3 pillow==11.3.0 matplotlib==3.10.6 scikit-image==0.25.2 
 If you have an NVIDIA GPU and want CUDA support, replace the `pip install torch==2.5.1 torchvision==0.20.1 ` line with:
 
 ```bash
-pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu121  # GPU
+pip install numpy==2.2.6 pillow==12.2.0 matplotlib==3.10.8 scikit-image==0.25.2 pandas==2.3.3 hydra-core==1.3.2 iopath==0.1.10 omegaconf==2.3.0 tqdm==4.67.3 customtkinter==5.2.2 CTkMessagebox==2.7 CTkColorPicker==0.9.0
 ```
 
 Then launch the application from the `application/` directory:
